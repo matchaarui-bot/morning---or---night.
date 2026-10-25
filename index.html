@@ -1,151 +1,114 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>morning or night?</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;background:#111;color:white}
-button{cursor:pointer}
-.phone{max-width:430px;min-height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(160deg,#aaa0c7,#5e456f,#201b32);background-size:cover;background-position:center}
-.screen{min-height:100dvh;padding:18px 22px;position:relative}
-.status{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
-.lock{text-align:center;padding-top:65px}
-.date{font-size:17px}
-.bigtime{font-size:82px;font-weight:300;letter-spacing:-3px;line-height:1.2}
-.notification{background:#f5f3f6df;color:#24212b;border-radius:20px;padding:14px;margin-top:35px;backdrop-filter:blur(15px);cursor:pointer}
-.ntop{display:flex;align-items:center;gap:9px;font-size:12px;color:#666}
-.wa{background:#32c76a;color:white;border-radius:9px;width:30px;height:30px;display:grid;place-items:center;font-weight:bold;font-size:18px}
-.ntitle{font-weight:700;font-size:14px;color:#222;margin-top:8px}
-.nbody{font-size:14px;margin-top:4px}
-.bottom{position:absolute;bottom:25px;left:0;right:0;text-align:center;font-size:12px}
-.unlock{margin-top:15px;border:1px solid #ffffff88;background:#ffffff20;color:white;border-radius:25px;padding:12px 24px;font-size:14px}
-.home{display:none;background:linear-gradient(160deg,#a89bbf,#5c456c,#29233c)}
-.home h1{font-size:40px;line-height:1.05;margin:55px 0 8px;letter-spacing:-1px}
-.sub{font-size:13px;color:#eee9f5}
-.widget{margin:25px 0;background:#ffffff27;border:1px solid #ffffff20;border-radius:23px;padding:18px;backdrop-filter:blur(15px)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px 12px;margin-top:30px}
-.app{border:0;background:none;color:white;font-size:12px}
-.icon{width:59px;height:59px;margin:0 auto 7px;border-radius:15px;background:#f3eef9;color:#5a496c;display:grid;place-items:center;font-size:27px;box-shadow:0 3px 8px #17102044}
-.green{background:#43c96b;color:white}.pink{background:#f16a9c;color:white}.yellow{background:#ffe9a0}
-.dock{margin-top:30px;background:#ffffff25;border-radius:25px;padding:12px;display:flex;justify-content:space-around}
-.page{display:none;position:absolute;inset:0;background:#f7f7fa;color:#222;overflow:auto;padding-bottom:20px}
-header{height:65px;padding:15px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;gap:15px;position:sticky;top:0}
-header button{border:0;background:none;font-size:28px;color:#2684ff}
-.chat{padding:16px;min-height:65vh}
-.day{text-align:center;color:#888;font-size:12px;margin:12px}
-.bubble{padding:11px 14px;border-radius:18px;margin:10px 0;max-width:85%;font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
-.in{background:#e5e5eb;border-bottom-left-radius:5px}
-.out{background:#1685ff;color:white;margin-left:auto;border-bottom-right-radius:5px}
-form{position:sticky;bottom:0;background:white;padding:12px;display:flex;gap:8px}
-input{min-width:0;flex:1;border:1px solid #ddd;border-radius:22px;padding:12px;font-size:15px}
-form button{border:0;border-radius:50%;background:#1685ff;color:white;width:42px}
-.note{margin:20px;background:#fff3ad;color:#333;padding:20px;border-radius:5px;line-height:1.8;min-height:220px}
-.post{margin:20px;padding:20px;background:linear-gradient(140deg,#252039,#aa819e);height:300px;display:grid;place-items:center;text-align:center;font-size:25px;border-radius:8px}
+body{margin:0;background:#111;color:white;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.phone{width:340px;height:690px;border:7px solid #292929;border-radius:42px;overflow:hidden;position:relative;background:linear-gradient(160deg,#7a8da7,#292b43 60%,#111);padding:20px}
+.screen{text-align:center;height:100%;position:relative}
+.time{font-size:65px;margin-top:65px;font-weight:300}
+.date{font-size:15px}
+.notif{background:#ffffffd9;color:#222;padding:15px;border-radius:17px;text-align:left;margin-top:55px;cursor:pointer}
+.notif b{font-size:13px}
+.notif p{margin:7px 0 0;font-size:14px}
+.hint{position:absolute;bottom:15px;width:100%;font-size:12px;color:#ddd}
+.hidden{display:none!important}
+input{background:#333;color:white;border:1px solid #777;border-radius:10px;padding:12px;font-size:20px;width:150px;text-align:center}
+button{border:0;border-radius:12px;padding:12px 18px;cursor:pointer;font-size:15px;margin:7px}
+#home{background:#a5a7bd;margin:-20px;padding:20px;height:100%;color:#222}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:120px}
+.app{cursor:pointer;font-size:13px}
+.icon{font-size:32px;background:#fff9;border-radius:15px;padding:12px;margin-bottom:5px}
+#chat{background:#e8e2d8;margin:-20px;padding:15px;height:100%;color:#222;text-align:left}
+.top{background:#075e54;color:white;padding:15px;margin:-15px -15px 15px}
+.msg{background:white;border-radius:12px;padding:10px;margin:9px 0;max-width:85%;font-size:14px}
+.me{background:#d4f8c6;margin-left:auto}
+#keyboard{position:absolute;bottom:0;left:0;width:100%;background:#d4d7df;padding:8px;display:none}
+.keyrow{display:flex;justify-content:center;gap:4px;margin:4px 0}
+.key{background:#fff;color:#222;border-radius:5px;padding:10px 0;flex:1;text-align:center;font-size:12px}
 </style>
 </head>
 <body>
 <div class="phone">
-<section class="screen lock" id="lock">
-<div class="status"><span id="statusTime">09:41</span><span>●●● ▰</span></div>
-<div style="margin-top:65px" class="date" id="lockDate">Sunday, October 25</div>
-<div class="bigtime" id="lockTime">09:41</div>
-<div class="notification" id="notification" onclick="openPage('messages')">
-<div class="ntop"><span class="wa">W</span><span>WHATSAPP</span><span style="margin-left:auto">NOW</span></div>
-<div class="ntitle">Carmen unnie..</div>
-<div class="nbody">Y39n kamudb dimany???737 :++++</div>
+<div id="lock" class="screen">
+<div class="time">09:41</div>
+<div class="date">minggu, 25 oktober</div>
+<div class="notif" onclick="password()">
+<b>▣ WHATSAPP · SEKARANG</b>
+<p><b>Adiba</b></p>
+<p>halimah, kamu dimana??</p>
 </div>
-<div class="bottom">
-<div>⌃</div>
-<div>swipe up to open</div>
-<button class="unlock" onclick="unlock()">unlock iphone</button>
+<div class="hint">tarik notifikasi untuk membuka</div>
 </div>
-</section><section class="screen home" id="home">
-<div class="status"><span id="homeTime">09:41</span><span>●●● ▰</span></div>
-<h1>morning<br>or night?</h1>
-<div class="sub" id="homeDate">Sunday · October 25</div>
-<div class="widget"><b>Good night, Ye-on.</b><br><br><span class="sub">you have 1 unread message.</span></div>
-<div class="grid">
-<button class="app" onclick="openPage('messages')"><span class="icon green">●</span>WhatsApp</button>
-<button class="app" onclick="openPage('instagram')"><span class="icon pink">◎</span>Instagram</button>
-<button class="app" onclick="openPage('notes')"><span class="icon yellow">▤</span>Notes</button>
-<button class="app" onclick="openPage('phone')"><span class="icon green">☎</span>Phone</button>
-<button class="app" onclick="openPage('photos')"><span class="icon">✿</span>Photos</button>
-<button class="app" onclick="openPage('clock')"><span class="icon">◷</span>Clock</button>
-</div>
-<div class="dock">
-<span>☎</span><span>●</span><span>◎</span><span>♫</span>
-</div>
-</section><section class="page" id="messages">
-<header><button onclick="goHome()">‹</button><strong>Carmen unnie..</strong></header>
-<div class="chat" id="chat">
-<div class="day">Today</div>
-<div class="bubble in">Y39n kamudb dimany???737 :++++</div>
-<div class="bubble out">??</div>
-</div>
-<form onsubmit="sendMsg(event)">
-<input id="msg" placeholder="Message" autocomplete="off">
-<button>↑</button>
-</form>
-</section><section class="page" id="instagram">
-<header><button onclick="goHome()">‹</button><strong>Instagram</strong></header>
-<div style="padding:20px"><b>carmen_h2h</b><div style="color:#888;font-size:12px">2 hours ago</div></div>
-<div class="post">MORNING<br>OR<br>NIGHT?</div>
-<div style="padding:20px"><b>carmen_h2h</b><br>jangan sampai pagi.</div>
-</section><section class="page" id="notes">
-<header><button onclick="goHome()">‹</button><strong>Notes</strong></header>
-<div class="note">untitled<br><br>kalau ada yang chat kamu jam 02:17,<br>jangan tanya dia ada di mana.<br><br>jangan jawab panggilannya.<br><br>[teks dihapus]</div>
-</section><section class="page" id="phone">
-<header><button onclick="goHome()">‹</button><strong>Phone</strong></header>
-<div style="text-align:center;padding:90px 20px">
-<div style="font-size:60px">C</div><h2>Carmen unnie..</h2><p>Incoming call...</p>
-<button onclick="alert('Missed call: Carmen unnie..')" style="background:#ff453a;color:white;border:0;border-radius:50%;padding:20px">✕</button>
-<button onclick="alert('...tidak ada suara...')" style="background:#32c759;color:white;border:0;border-radius:50%;padding:20px">☎</button>
-</div>
-</section><section class="page" id="photos">
-<header><button onclick="goHome()">‹</button><strong>Photos</strong></header>
-<div class="post">02:17 AM<br><br>the hallway is empty.</div>
-</section><section class="page" id="clock">
-<header><button onclick="goHome()">‹</button><strong>Clock</strong></header>
-<div style="text-align:center;padding:80px 10px;font-size:45px"><span id="clockTime">09:41</span><br><span style="font-size:14px">Alarm · 02:17 AM</span></div>
-</section>
-</div><script>
-function updateTime(){
-const now=new Date();
-const time=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',hour12:false});
-const date=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-['statusTime','homeTime','lockTime','clockTime'].forEach(id=>document.getElementById(id).textContent=time);
-document.getElementById('lockDate').textContent=date;
-document.getElementById('homeDate').textContent=date;
-}
-updateTime();
-setInterval(updateTime,1000);
 
+<div id="pass" class="screen hidden">
+<h2>masukkan kode sandi</h2>
+<p>masukkan 1234 untuk membuka</p>
+<input id="pin" type="password" maxlength="4" placeholder="••••">
+<br><button onclick="unlock()">buka iPhone</button>
+<p id="error"></p>
+</div>
+
+<div id="home" class="screen hidden">
+<h3>minggu, 25 oktober</h3>
+<div class="apps">
+<div class="app" onclick="openChat()"><div class="icon">💬</div>WhatsApp</div>
+<div class="app"><div class="icon">📷</div>kamera</div>
+<div class="app"><div class="icon">🎵</div>musik</div>
+</div>
+</div>
+
+<div id="chat" class="screen hidden">
+<div class="top">‹ &nbsp; Adiba<br><small>online</small></div>
+<div id="messages">
+<div class="msg">HALIMAH ANJIR LO DI MANA???</div>
+<div class="msg">GUE MAU NGASIH TAU SESUATU.</div>
+</div>
+<button onclick="typeMessage()">⌨️ ketik pesan</button>
+<div id="keyboard">
+<div class="keyrow"><div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div><div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div></div>
+<div class="keyrow"><div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div><div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div><div class="key">L</div></div>
+<div class="keyrow"><div class="key" onclick="sendMessage()">➤ kirim pesan otomatis</div></div>
+</div>
+</div>
+</div>
+<script>
+function show(id){
+['lock','pass','home','chat'].forEach(x=>document.getElementById(x).classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+}
+function password(){show('pass');}
 function unlock(){
-document.getElementById('lock').style.display='none';
-document.getElementById('home').style.display='block';
+if(document.getElementById('pin').value==='1234')show('home');
+else document.getElementById('error').textContent='kode salah, coba lagi';
 }
-function openPage(id){
-document.getElementById('home').style.display='none';
-document.getElementById('lock').style.display='none';
-document.querySelectorAll('.page').forEach(p=>p.style.display='none');
-document.getElementById(id).style.display='block';
+function openChat(){show('chat');}
+function typeMessage(){document.getElementById('keyboard').style.display='block';}
+function sendMessage(){
+const box=document.getElementById('messages');
+const msg=document.createElement('div');
+msg.className='msg me';
+msg.textContent='';
+box.appendChild(msg);
+const text='bentar, gue di jalan. emang ada apa sih?';
+let i=0;
+const timer=setInterval(()=>{
+msg.textContent+=text[i++];
+if(i>=text.length){
+clearInterval(timer);
+setTimeout(()=>{
+const reply=document.createElement('div');
+reply.className='msg';
+reply.textContent='ADIBA: LO KENAL RAFKA KAN???';
+box.appendChild(reply);
+},700);
 }
-function goHome(){
-document.querySelectorAll('.page').forEach(p=>p.style.display='none');
-document.getElementById('home').style.display='block';
+},65);
+document.getElementById('keyboard').style.display='none';
 }
-function sendMsg(e){
-e.preventDefault();
-const input=document.getElementById('msg');
-const value=input.value.trim();
-if(!value)return;
-const b=document.createElement('div');
-b.className='bubble out';
-b.textContent=value;
-document.getElementById('chat').appendChild(b);
-input.value='';
-document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-}
-</script></body>
+</script>
+</body>
   </html>
