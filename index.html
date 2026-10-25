@@ -4,564 +4,450 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>morning or night?</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap');
 
-:root {
-  --green:#075e54;
-  --mint:#d9fdd3;
-  --cream:#f8f5f0;
-  --ink:#292723;
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--green:#075e54;--lightgreen:#d9fdd3;--cream:#f5f1e9}
+body{
+ margin:0;background:#111;color:#fff;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ height:100dvh;overflow:hidden;display:flex;justify-content:center;align-items:center
 }
-* {box-sizing:border-box}
-body {
-  margin:0;
-  min-height:100vh;
-  background:#171717;
-  color:var(--ink);
-  font-family:'DM Sans',sans-serif;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:18px 0;
+button{font:inherit;cursor:pointer;border:0}
+.phone{
+ width:100%;height:100dvh;max-width:430px;position:relative;overflow:hidden;
+ background:#eee;border-radius:0;box-shadow:0 0 35px #0008
 }
-button {font-family:inherit;cursor:pointer}
-.phone {
-  width:min(390px,100vw);
-  height:min(820px,94dvh);
-  min-height:580px;
-  background:#f8f7f3;
-  border:5px solid #282828;
-  border-radius:43px;
-  overflow:hidden;
-  position:relative;
-  box-shadow:0 0 0 2px #555,0 25px 90px #0009;
+@media(min-width:500px){
+ .phone{height:min(900px,94dvh);border:7px solid #222;border-radius:42px}
 }
-.status {
-  position:absolute;
-  z-index:20;
-  top:0;left:0;right:0;
-  height:35px;
-  padding:11px 25px 0;
-  display:flex;
-  justify-content:space-between;
-  font-size:12px;
-  font-weight:700;
-  pointer-events:none;
+.screen{position:absolute;inset:0;display:none;overflow:hidden}
+.screen.active{display:block}
+.status{
+ position:absolute;top:0;left:0;right:0;height:43px;padding:12px 25px 0;
+ display:flex;justify-content:space-between;z-index:30;color:white;
+ font-size:12px;font-weight:700;pointer-events:none
 }
-.status.light {color:white}
-.status.dark {color:#222}
-.status .icons {letter-spacing:2px}
+.status .icons{letter-spacing:2px}
 
 /* LOCK SCREEN */
-#lock {
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-  color:white;
-  background:
-    linear-gradient(180deg,#17233b18 0%,#15172b25 35%,#10101cbd 100%),
-    url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=90') center/cover;
+#lock{
+ color:white;
+ background:
+ linear-gradient(#0003,#0002 40%,#0008),
+ url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1000&q=85")
+ center/cover;
+ touch-action:none;user-select:none
 }
-.lock-date {
-  text-align:center;
-  margin-top:91px;
-  font-size:16px;
-  font-weight:500;
-  text-shadow:0 1px 8px #0008;
+.lock-shade{position:absolute;inset:0;background:linear-gradient(#0001,#0002 35%,#0006)}
+.lock-time{text-align:center;position:absolute;top:105px;width:100%}
+.lock-date{font-size:17px;font-weight:500}
+.lock-clock{font-size:76px;font-weight:300;letter-spacing:-3px;margin-top:0}
+.lock-note{
+ position:absolute;top:300px;left:15px;right:15px;
+ border-radius:19px;padding:14px;background:#e8e8e8e8;color:#222;
+ backdrop-filter:blur(20px);cursor:pointer
 }
-.lock-time {
-  text-align:center;
-  font-size:82px;
-  line-height:1.08;
-  letter-spacing:-5px;
-  font-weight:400;
-  margin-top:3px;
-  text-shadow:0 2px 20px #0006;
+.note-top{display:flex;align-items:center;gap:9px;font-size:12px;color:#555}
+.wa-icon{width:28px;height:28px;border-radius:8px;background:#20bd69;color:white;
+ display:grid;place-items:center;font-size:18px;font-weight:bold}
+.note-title{font-weight:700;color:#222;font-size:14px}
+.note-time{margin-left:auto}
+.note-message{font-size:14px;margin:8px 0 0 37px}
+.swipe-hint{
+ position:absolute;bottom:68px;width:100%;text-align:center;
+ font-size:12px;color:#ffffffd9;letter-spacing:.3px
 }
-.lock-note {
-  margin:37px 13px 0;
-  padding:15px 16px;
-  border-radius:23px;
-  background:#f7f7f7df;
-  color:#252525;
-  backdrop-filter:blur(20px);
-  cursor:pointer;
-  animation:rise .65s ease both;
-}
-.note-head {
-  font-size:10px;
-  color:#555;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-bottom:9px;
-}
-.wa-icon {
-  width:18px;height:18px;border-radius:6px;
-  background:#25d366;color:white;
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;
-}
-.note-name {font-size:14px;font-weight:700}
-.note-text {font-size:14px;margin-top:3px}
-.lock-bottom {
-  position:absolute;
-  bottom:25px;
-  left:0;right:0;
-  text-align:center;
-  font-size:11px;
-  color:#ffffffc9;
-}
-.lock-line {
-  width:120px;height:4px;
-  border-radius:9px;background:white;
-  margin:17px auto 0;
-}
-.lock-camera {
-  position:absolute;bottom:36px;right:25px;
-  width:39px;height:39px;
-  background:#ffffff35;border-radius:50%;
-  display:grid;place-items:center;font-size:17px;
-}
+.lock-bottom{position:absolute;bottom:22px;left:0;right:0;display:flex;justify-content:space-around}
+.round-btn{width:46px;height:46px;border-radius:50%;background:#ffffff33;
+ display:grid;place-items:center;font-size:19px;backdrop-filter:blur(10px)}
+.home-bar{position:absolute;bottom:8px;left:calc(50% - 55px);width:110px;height:4px;
+ border-radius:10px;background:white;z-index:40}
 
-/* PASSWORD */
-#pass {
-  position:absolute;inset:0;
-  background:linear-gradient(150deg,#e6d9cc,#c7c5d3,#e5d9d1);
-  display:none;text-align:center;
-  padding:105px 25px 20px;
+/* PASSCODE */
+#pass{background:#111;color:white;text-align:center}
+.pass-title{margin-top:120px;font-size:23px;font-weight:600}
+.pass-sub{font-size:13px;color:#aaa;margin-top:9px}
+.dots{display:flex;justify-content:center;gap:17px;margin:32px 0}
+.dot{width:11px;height:11px;border:1px solid #ddd;border-radius:50%}
+.dot.filled{background:white}
+.keypad{width:270px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:16px 22px}
+.key{
+ height:65px;width:65px;border-radius:50%;background:#303034;color:white;
+ font-size:25px;margin:auto
 }
-.pass-symbol {
-  width:57px;height:57px;border:2px solid #292929;
-  border-radius:20px;margin:0 auto 22px;
-  display:grid;place-items:center;font-size:26px;
-}
-#pass h2 {font-size:22px;margin:0 0 9px}
-#pass p {font-size:13px;color:#555}
-.pin-dots {display:flex;justify-content:center;gap:17px;margin:25px 0}
-.pin-dot {width:12px;height:12px;border:1.5px solid #444;border-radius:50%}
-.pin-dot.filled {background:#292929}
-.keypad {
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:13px 19px;max-width:250px;margin:0 auto;
-}
-.num {
-  height:58px;border-radius:50%;border:0;
-  background:#ffffff80;color:#252525;font-size:23px;
-}
-.num small {display:block;font-size:8px;letter-spacing:2px}
-.pass-error {color:#9e2525!important;min-height:18px}
+.key small{display:block;font-size:9px;letter-spacing:2px}
+.key:active{background:#555}
+.pass-error{height:20px;font-size:12px;color:#ff7777;margin-top:15px}
+.pass-cancel{margin-top:16px;background:none;color:white;font-size:14px}
 
 /* HOME SCREEN */
-#home {
-  position:absolute;inset:0;
-  display:none;
-  padding:65px 22px 25px;
-  background:
-    linear-gradient(180deg,#a3b7b5b0,#d7c9d2ad),
-    url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=90') center/cover;
+#home{
+ background:
+ linear-gradient(#0001,#0003),
+ url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=900&q=85") center/cover
 }
-.home-date {font-size:13px;color:#fff;text-shadow:0 1px 4px #333}
-.home-clock {font-size:37px;color:white;font-weight:500;margin-top:2px}
-.widget {
-  background:#ffffffb9;
-  backdrop-filter:blur(16px);
-  border-radius:23px;
-  padding:16px;
-  margin-top:20px;
-  font-size:12px;
+.home-date{position:absolute;top:68px;left:25px;font-size:14px;text-shadow:0 1px 6px #000}
+.home-clock{font-size:38px;font-weight:300}
+.apps{position:absolute;top:190px;left:22px;right:22px;
+ display:grid;grid-template-columns:repeat(4,1fr);gap:26px 12px}
+.app{background:none;color:white;text-align:center;font-size:11px;text-shadow:0 1px 4px #000}
+.app-icon{width:56px;height:56px;border-radius:14px;margin:0 auto 7px;
+ display:grid;place-items:center;font-size:29px;box-shadow:0 3px 8px #0002}
+.whatsapp{background:#20c967}
+.instagram{background:linear-gradient(135deg,#7655d8,#e63b81,#ffad42)}
+.photos{background:linear-gradient(135deg,#fff,#ddd);color:#ff725e}
+.camera{background:linear-gradient(135deg,#666,#222)}
+.notes{background:#ffdb59;color:#333}
+.safari{background:#f8f8f8;color:#1688ef}
+.dock{
+ position:absolute;bottom:28px;left:15px;right:15px;padding:13px 8px;
+ border-radius:27px;background:#ffffff55;backdrop-filter:blur(20px);
+ display:flex;justify-content:space-around
 }
-.widget strong {display:block;font-size:14px;margin-bottom:5px}
-.app-grid {
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:24px 9px;margin-top:35px;
-}
-.app {border:0;background:none;color:white;text-align:center;padding:0}
-.app-icon {
-  width:54px;height:54px;margin:auto auto 7px;
-  display:grid;place-items:center;
-  border-radius:15px;font-size:27px;
-  box-shadow:0 3px 8px #0002;
-}
-.app span {font-size:10px;text-shadow:0 1px 4px #333}
-.dock {
-  position:absolute;bottom:23px;left:17px;right:17px;
-  background:#ffffff62;backdrop-filter:blur(20px);
-  border-radius:25px;padding:12px;
-  display:flex;justify-content:space-around;
-}
-.dock .app-icon {margin:0;width:49px;height:49px}
+.dock .app-icon{margin:0}
 
 /* WHATSAPP */
-#whatsapp {
-  position:absolute;inset:0;
-  background:#f8f7f3;
-  display:none;
+#wa{background:#efeae2;color:#111}
+.wa-header{
+ height:78px;padding:43px 13px 10px;background:#f7f7f7;
+ display:flex;align-items:center;gap:12px;border-bottom:1px solid #ddd
 }
-.wa-header {
-  padding:46px 18px 13px;
-  background:#f8f7f3;
-  border-bottom:1px solid #e9e6e0;
-}
-.wa-heading {font-size:28px;font-weight:700;letter-spacing:-1px}
-.wa-search {
-  background:#eae8e3;border-radius:10px;
-  padding:10px 13px;color:#777;font-size:13px;margin-top:13px;
-}
-.wa-tabs {display:flex;gap:9px;margin-top:13px}
-.wa-tab {
-  border:0;background:#e9e6e0;color:#555;
-  border-radius:20px;padding:7px 13px;font-size:12px;
-}
-.wa-tab.active {background:#d9fdd3;color:#17624d}
-.chat-list {overflow-y:auto;height:calc(100% - 171px)}
-.chat-item {
-  display:flex;align-items:center;gap:12px;
-  padding:13px 15px;border:0;background:transparent;
-  width:100%;text-align:left;color:#292723;
-}
-.chat-item:active {background:#eae8e3}
-.avatar {
-  width:49px;height:49px;flex-shrink:0;
-  border-radius:50%;display:grid;place-items:center;
-  color:white;font-size:18px;font-weight:600;
-}
-.avatar img {width:100%;height:100%;object-fit:cover;border-radius:50%}
-.chat-info {flex:1;min-width:0}
-.chat-topline {display:flex;justify-content:space-between;gap:6px}
-.chat-name {font-size:14px;font-weight:700}
-.chat-time {font-size:10px;color:#888}
-.chat-preview {
-  font-size:12px;color:#777;margin-top:5px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.unread {
-  background:#25b765;color:white;border-radius:50%;
-  min-width:18px;height:18px;font-size:10px;
-  display:grid;place-items:center;margin-top:5px;
-}
+.back{background:none;color:#087f73;font-size:25px;padding:0 3px}
+.profile-pic{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;
+ background:#b5d8c5;color:#245c49;font-weight:700;font-size:16px}
+.header-name{font-size:16px;font-weight:650}
+.header-sub{font-size:11px;color:#777;margin-top:3px}
+.wa-tools{margin-left:auto;color:#555;font-size:20px}
+.tabs{display:flex;background:#f7f7f7;border-bottom:1px solid #ddd}
+.tab{flex:1;padding:13px 0;text-align:center;font-size:12px;color:#777}
+.tab.selected{color:#087f73;border-bottom:3px solid #087f73;font-weight:700}
+.chat-list{overflow-y:auto;height:calc(100% - 120px);background:#fff;color:#111}
+.chat-row{height:78px;display:flex;align-items:center;padding:0 14px;gap:12px;cursor:pointer}
+.chat-row:active{background:#eee}
+.chat-avatar{width:49px;height:49px;border-radius:50%;display:grid;place-items:center;
+ background:#d8c5b5;color:#584333;font-size:19px;font-weight:700;flex-shrink:0}
+.chat-info{flex:1;min-width:0;border-bottom:1px solid #eee;padding:14px 0}
+.chat-line{display:flex;justify-content:space-between;gap:8px}
+.chat-name{font-size:15px;font-weight:600}
+.chat-time{font-size:10px;color:#888;white-space:nowrap}
+.chat-preview{font-size:12px;color:#777;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.green-dot{background:#20c967;color:white;border-radius:50%;font-size:10px;padding:3px 6px;margin-left:5px}
 
 /* CHAT ROOM */
-#room {
-  position:absolute;inset:0;
-  display:none;flex-direction:column;
-  background:#efe9df;
+#room{background:#efeae2;color:#111}
+.room-head{height:76px;padding:38px 10px 8px;background:#f7f7f7;display:flex;align-items:center;gap:9px}
+.room-head .profile-pic{width:37px;height:37px}
+.room-body{
+ position:absolute;top:76px;bottom:65px;left:0;right:0;padding:14px 11px;
+ overflow-y:auto;background-color:#e9e1d5;
+ background-image:radial-gradient(#c7bcae55 .7px,transparent .7px);
+ background-size:8px 8px
 }
-.room-header {
-  height:76px;flex-shrink:0;
-  background:#f8f7f3;
-  display:flex;align-items:center;gap:10px;
-  padding:35px 12px 8px;
-  border-bottom:1px solid #e7e3dd;
+.day-label{background:#fff1cf;color:#796a50;border-radius:7px;padding:6px 12px;
+ font-size:10px;text-align:center;width:max-content;margin:0 auto 17px}
+.msg{max-width:82%;width:max-content;padding:8px 9px 5px;border-radius:9px;
+ margin:7px 0;font-size:13px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;
+ box-shadow:0 1px 1px #0001}
+.msg.them{background:#fff;border-top-left-radius:2px}
+.msg.me{background:#d8f8ce;margin-left:auto;border-top-right-radius:2px}
+.msg-time{font-size:9px;color:#888;text-align:right;margin-top:3px}
+.sender{font-size:10px;color:#a15a91;font-weight:700;margin-bottom:3px}
+.typing{font-size:11px;color:#777;padding:5px 8px}
+.composer{
+ position:absolute;bottom:0;left:0;right:0;height:65px;background:#f7f7f7;
+ display:flex;align-items:center;gap:7px;padding:8px
 }
-.back {
-  border:0;background:none;font-size:25px;color:#176b5a;
-  padding:0 3px;
+.plus{font-size:27px;color:#777;background:none}
+.fake-input{
+ flex:1;border-radius:22px;background:white;border:1px solid #ddd;height:42px;
+ padding:11px 14px;font-size:13px;color:#555;cursor:pointer
 }
-.room-avatar {
-  width:37px;height:37px;border-radius:50%;
-  display:grid;place-items:center;color:white;font-weight:600;
+.send-btn{width:40px;height:40px;border-radius:50%;background:#087f73;color:white;font-size:18px}
+.keyboard{
+ position:absolute;bottom:0;left:0;right:0;background:#d2d5dc;padding:8px 5px 22px;
+ z-index:15;display:none;color:#222
 }
-.room-person {flex:1}
-.room-name {font-size:14px;font-weight:700}
-.room-status {font-size:10px;color:#777;margin-top:3px}
-.room-menu {border:0;background:none;font-size:22px}
-.messages {
-  flex:1;overflow-y:auto;padding:17px 12px 20px;
-  background:
-    linear-gradient(#eee8dfed,#eee8dfed),
-    url('https://www.transparenttextures.com/patterns/cubes.png');
-  scroll-behavior:smooth;
-}
-.day-label {
-  width:max-content;margin:0 auto 17px;
-  background:#fff9ed;padding:6px 12px;border-radius:8px;
-  color:#777;font-size:10px;box-shadow:0 1px 2px #0001;
-}
-.bubble {
-  position:relative;width:max-content;max-width:86%;
-  padding:9px 10px 6px;margin:7px 0;
-  font-size:13px;line-height:1.55;
-  border-radius:10px;background:white;
-  box-shadow:0 1px 1px #0001;
-  white-space:pre-wrap;overflow-wrap:anywhere;
-  animation:rise .2s ease;
-}
-.bubble.mine {background:#d9fdd3;margin-left:auto;border-top-right-radius:3px}
-.bubble.theirs {border-top-left-radius:3px}
-.bubble .time {
-  font-size:9px;color:#888;text-align:right;
-  margin-left:17px;display:inline-block;
-}
-.bubble .sender {
-  color:#9a5e8c;font-size:10px;font-weight:700;
-  display:block;margin-bottom:3px;
-}
-.bubble.typing {color:#888;font-style:italic}
-.choice-area {
-  flex-shrink:0;background:#f8f7f3;
-  padding:10px 10px 12px;border-top:1px solid #e9e5df;
-}
-.choice-label {font-size:10px;color:#888;text-align:center;margin-bottom:8px}
-.choices {display:flex;flex-direction:column;gap:7px}
-.choice {
-  width:100%;text-align:left;padding:11px 13px;
-  border:1px solid #d7e4d4;background:white;
-  border-radius:12px;font-size:12px;color:#333;
-}
-.choice:active {background:#e3f6df}
-.keyboard-wrap {display:none}
-.keyboard-hint {font-size:11px;color:#888;text-align:center;padding:5px}
-.keyboard {
-  background:#d6d9e0;padding:7px 3px 10px;
-  border-radius:12px;
-}
-.keyrow {display:flex;justify-content:center;gap:4px;margin:4px 0}
-.key {
-  flex:1;min-width:0;height:34px;border:0;border-radius:5px;
-  background:#fff;color:#292929;font-size:12px;
-  box-shadow:0 1px 1px #999;
-}
-.key.special {background:#aeb6c5}
-.key.space {flex:4}
-.key.enter {background:#4b8be8;color:white;flex:1.4}
-.compose {
-  display:flex;align-items:center;gap:7px;
-  background:#f8f7f3;padding:8px;
-  flex-shrink:0;
-}
-.compose button {
-  border:0;background:none;font-size:21px;color:#777;
-}
-.compose-input {
-  flex:1;background:white;border:1px solid #e2dfd9;
-  border-radius:22px;padding:11px 13px;
-  font-size:12px;min-width:0;color:#555;
-}
-.send {
-  width:38px;height:38px;border-radius:50%;
-  border:0;background:#087e68;color:white;font-size:16px;
-}
-#typingOverlay {
-  display:none;position:absolute;inset:0;z-index:30;
-  background:#0005;align-items:center;justify-content:center;
-}
-.typing-card {
-  background:#fff;border-radius:19px;padding:25px;
-  width:82%;box-shadow:0 10px 40px #0002;
-}
-.typing-card small {color:#888}
-.typing-card p {font-size:13px;line-height:1.6;min-height:45px}
-.typing-bar {height:3px;background:#e6e6e6;border-radius:5px;overflow:hidden}
-.typing-progress {height:100%;width:0;background:#16836d}
-.typing-card button {
-  margin-top:15px;width:100%;border:0;border-radius:10px;
-  background:#075e54;color:white;padding:12px;
-}
-#toast {
-  display:none;position:absolute;z-index:50;bottom:25px;
-  left:15%;width:70%;padding:12px;background:#292929e8;
-  color:white;text-align:center;font-size:12px;border-radius:12px;
-}
-.home-indicator {
-  position:absolute;bottom:5px;left:calc(50% - 55px);
-  width:110px;height:4px;background:#777;border-radius:9px;
-  z-index:25;cursor:pointer;
-}
-@keyframes rise {
-  from {opacity:0;transform:translateY(8px)}
-  to {opacity:1;transform:translateY(0)}
-}
-@media(max-height:650px) {
-  .phone {height:96dvh;min-height:0}
-  .lock-date {margin-top:60px}
-  .lock-time {font-size:67px}
-  .lock-note {margin-top:23px}
-  .app-grid {margin-top:20px;gap:13px 7px}
-  .app-icon {width:46px;height:46px;font-size:23px}
-}
+.keyboard.show{display:block}
+.kb-label{text-align:center;font-size:10px;color:#555;padding:3px 0 8px}
+.kb-row{display:flex;gap:4px;justify-content:center;margin:5px 0}
+.kb-key{height:37px;flex:1;max-width:44px;border-radius:5px;background:#fff;
+ box-shadow:0 1px 1px #999;font-size:15px;color:#222}
+.kb-wide{max-width:70px;background:#b7bdc7;font-size:11px}
+.kb-enter{max-width:70px;background:#087f73;color:white;font-size:13px;font-weight:700}
+.kb-space{max-width:none;flex:4}
+.toast{position:absolute;top:88px;left:50%;transform:translateX(-50%);
+ background:#222;color:#fff;padding:9px 15px;border-radius:20px;font-size:12px;
+ display:none;z-index:50;white-space:nowrap}
 </style>
 </head>
+
 <body>
+<div class="phone">
+ <div class="status"><span id="statusTime">9:41</span><span class="icons">●●● ▰</span></div>
 
-<div class="phone" id="phone">
-
-  <div class="status light" id="status">
-    <span>9:41</span><span class="icons">● ▰ ▰</span>
+ <!-- LOCK SCREEN -->
+ <section id="lock" class="screen active">
+  <div class="lock-shade"></div>
+  <div class="lock-time">
+   <div class="lock-date" id="lockDate">Sunday, 25 October</div>
+   <div class="lock-clock" id="lockClock">09:41</div>
   </div>
+  <div class="lock-note" id="notification" role="button" tabindex="0">
+   <div class="note-top">
+    <div class="wa-icon">◉</div>
+    <span class="note-title">WHATSAPP</span>
+    <span class="note-time">now</span>
+   </div>
+   <div class="note-message"><b>Adiba</b><br>halimah, kamu dimana??</div>
+  </div>
+  <div class="swipe-hint">tarik layar ke bawah untuk membuka</div>
+  <div class="lock-bottom">
+   <button class="round-btn" id="flashBtn" aria-label="Flashlight">ϟ</button>
+   <button class="round-btn" id="cameraBtn" aria-label="Camera">▣</button>
+  </div>
+  <div class="home-bar"></div>
+ </section>
 
-  <!-- LOCK SCREEN -->
-  <section id="lock">
-    <div class="lock-date" id="lockDate">minggu, 25 oktober</div>
-    <div class="lock-time" id="lockTime">09:41</div>
+ <!-- PASSCODE -->
+ <section id="pass" class="screen">
+  <div class="pass-title">Masukkan Kode Sandi</div>
+  <div class="pass-sub">iPhone terkunci</div>
+  <div class="dots" id="dots">
+   <span class="dot"></span><span class="dot"></span>
+   <span class="dot"></span><span class="dot"></span>
+  </div>
+  <div class="keypad">
+   <button class="key" data-num="1">1<small> </small></button>
+   <button class="key" data-num="2">2<small>ABC</small></button>
+   <button class="key" data-num="3">3<small>DEF</small></button>
+   <button class="key" data-num="4">4<small>GHI</small></button>
+   <button class="key" data-num="5">5<small>JKL</small></button>
+   <button class="key" data-num="6">6<small>MNO</small></button>
+   <button class="key" data-num="7">7<small>PQRS</small></button>
+   <button class="key" data-num="8">8<small>TUV</small></button>
+   <button class="key" data-num="9">9<small>WXYZ</small></button>
+   <span></span><button class="key" data-num="0">0</button>
+   <button class="key" id="deleteKey" style="font-size:13px;background:transparent">hapus</button>
+  </div>
+  <div class="pass-error" id="passError"></div>
+  <button class="pass-cancel" id="cancelPass">Batal</button>
+  <div class="home-bar"></div>
+ </section>
 
-    <div class="lock-note" onclick="openPass()">
-      <div class="note-head">
-        <span class="wa-icon">◉</span>
-        <b>WHATSAPP</b>
-        <span style="margin-left:auto">sekarang</span>
-      </div>
-      <div class="note-name">Adiba</div>
-      <div class="note-text">halimah, kamu dimana??</div>
+ <!-- HOME SCREEN -->
+ <section id="home" class="screen">
+  <div class="home-date">
+   <div id="homeDay">minggu, 25 oktober</div>
+   <div class="home-clock" id="homeClock">09:41</div>
+  </div>
+  <div class="apps">
+   <button class="app" data-app="wa"><div class="app-icon whatsapp">◉</div>WhatsApp</button>
+   <button class="app" data-app="instagram"><div class="app-icon instagram">◎</div>Instagram</button>
+   <button class="app" data-app="photos"><div class="app-icon photos">✿</div>Foto</button>
+   <button class="app" data-app="camera"><div class="app-icon camera">▣</div>Kamera</button>
+   <button class="app" data-app="notes"><div class="app-icon notes">▤</div>Catatan</button>
+   <button class="app" data-app="safari"><div class="app-icon safari">◉</div>Safari</button>
+  </div>
+  <div class="dock">
+   <button class="app" data-app="phone"><div class="app-icon" style="background:#26c65e">☎</div></button>
+   <button class="app" data-app="wa"><div class="app-icon whatsapp">◉</div></button>
+   <button class="app" data-app="instagram"><div class="app-icon instagram">◎</div></button>
+   <button class="app" data-app="camera"><div class="app-icon camera">▣</div></button>
+  </div>
+  <div class="home-bar"></div>
+ </section>
+
+ <!-- WHATSAPP CHAT LIST -->
+ <section id="wa" class="screen">
+  <div class="wa-header">
+   <button class="back" id="waBack">‹</button>
+   <div style="font-size:20px;font-weight:700">WhatsApp</div>
+   <div class="wa-tools">⌕　⋮</div>
+  </div>
+  <div class="tabs">
+   <div class="tab selected">CHAT</div><div class="tab">PEMBARUAN</div><div class="tab">PANGGILAN</div>
+  </div>
+  <div class="chat-list">
+   <div class="chat-row" data-chat="adiba">
+    <div class="chat-avatar" style="background:#e6c6d6">A</div>
+    <div class="chat-info">
+     <div class="chat-line"><span class="chat-name">Adiba</span><span class="chat-time">09.40</span></div>
+     <div class="chat-preview" id="preview-adiba">halimah, kamu dimana?? <span class="green-dot">2</span></div>
     </div>
-
-    <div class="lock-bottom">
-      geser ke atas untuk membuka
-      <div class="lock-line" id="lockLine"></div>
+   </div>
+   <div class="chat-row" data-chat="rafka">
+    <div class="chat-avatar" style="background:#c5d5e6">R</div>
+    <div class="chat-info">
+     <div class="chat-line"><span class="chat-name">Rafka</span><span class="chat-time">09.32</span></div>
+     <div class="chat-preview" id="preview-rafka">lo udah sampe sekolah?</div>
     </div>
-    <div class="lock-camera">◉</div>
-  </section>
-
-  <!-- PASSWORD -->
-  <section id="pass">
-    <div class="pass-symbol">♙</div>
-    <h2>masukkan kode sandi</h2>
-    <p>masukkan kode untuk membuka iPhone</p>
-    <div class="pin-dots" id="pinDots">
-      <span class="pin-dot"></span><span class="pin-dot"></span>
-      <span class="pin-dot"></span><span class="pin-dot"></span>
+   </div>
+   <div class="chat-row" data-chat="kelas">
+    <div class="chat-avatar" style="background:#d4d8b7">8B</div>
+    <div class="chat-info">
+     <div class="chat-line"><span class="chat-name">kelas 8B</span><span class="chat-time">08.56</span></div>
+     <div class="chat-preview">Alya: jangan lupa tugasnya</div>
     </div>
-    <div class="keypad">
-      <button class="num" onclick="addPin('1')">1<small>&nbsp;</small></button>
-      <button class="num" onclick="addPin('2')">2<small>ABC</small></button>
-      <button class="num" onclick="addPin('3')">3<small>DEF</small></button>
-      <button class="num" onclick="addPin('4')">4<small>GHI</small></button>
-      <button class="num" onclick="addPin('5')">5<small>JKL</small></button>
-      <button class="num" onclick="addPin('6')">6<small>MNO</small></button>
-      <button class="num" onclick="addPin('7')">7<small>PQRS</small></button>
-      <button class="num" onclick="addPin('8')">8<small>TUV</small></button>
-      <button class="num" onclick="addPin('9')">9<small>WXYZ</small></button>
-      <button class="num" style="visibility:hidden"></button>
-      <button class="num" onclick="addPin('0')">0</button>
-      <button class="num" onclick="delPin()" style="font-size:12px">hapus</button>
-    </div>
-    <p class="pass-error" id="passError"></p>
-  </section>
+   </div>
+  </div>
+  <div class="home-bar" style="background:#111"></div>
+ </section>
 
-  <!-- HOME -->
-  <section id="home">
-    <div class="home-date">minggu, 25 oktober</div>
-    <div class="home-clock" id="homeClock">09:41</div>
+ <!-- CHAT ROOM -->
+ <section id="room" class="screen">
+  <div class="room-head">
+   <button class="back" id="roomBack">‹</button>
+   <div class="profile-pic" id="roomAvatar">A</div>
+   <div><div class="header-name" id="roomName">Adiba</div><div class="header-sub" id="roomSub">online</div></div>
+   <div class="wa-tools">▯　☎　⋮</div>
+  </div>
+  <div class="room-body" id="messages">
+   <div class="day-label">HARI INI</div>
+  </div>
+  <div class="composer" id="composer">
+   <button class="plus">＋</button>
+   <button class="fake-input" id="fakeInput">Pesan</button>
+   <button class="send-btn" id="sendBtn">➤</button>
+  </div>
+  <div class="keyboard" id="keyboard">
+   <div class="kb-label">ketuk tombol ↵ untuk membalas</div>
+   <div class="kb-row">
+    <button class="kb-key">q</button><button class="kb-key">w</button><button class="kb-key">e</button><button class="kb-key">r</button><button class="kb-key">t</button><button class="kb-key">y</button><button class="kb-key">u</button><button class="kb-key">i</button><button class="kb-key">o</button><button class="kb-key">p</button>
+   </div>
+   <div class="kb-row">
+    <button class="kb-key">a</button><button class="kb-key">s</button><button class="kb-key">d</button><button class="kb-key">f</button><button class="kb-key">g</button><button class="kb-key">h</button><button class="kb-key">j</button><button class="kb-key">k</button><button class="kb-key">l</button>
+   </div>
+   <div class="kb-row">
+    <button class="kb-key kb-wide">⇧</button><button class="kb-key">z</button><button class="kb-key">x</button><button class="kb-key">c</button><button class="kb-key">v</button><button class="kb-key">b</button><button class="kb-key">n</button><button class="kb-key">m</button><button class="kb-key kb-wide">⌫</button>
+   </div>
+   <div class="kb-row">
+    <button class="kb-key kb-wide">123</button><button class="kb-key kb-space">spasi</button>
+    <button class="kb-key kb-enter" id="keyboardEnter">↵</button>
+   </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="home-bar" style="background:#111"></div>
+ </section>
+</div>
 
-    <div class="widget">
-      <strong>your day, your story.</strong>
-      sunday mood. no plans, just vibes.
-      <div style="margin-top:12px;color:#777">tap an app to continue ↗</div>
-    </div>
+<script>
+const $ = id => document.getElementById(id);
+const screens = document.querySelectorAll('.screen');
+function showScreen(name){
+ screens.forEach(s=>s.classList.remove('active'));
+ $(name).classList.add('active');
+}
+function updateClock(){
+ const now=new Date();
+ const time=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',hour12:false});
+ $('statusTime').textContent=time;
+ $('lockClock').textContent=time;
+ $('homeClock').textContent=time;
+ $('lockDate').textContent=now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
+ $('homeDay').textContent=now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'});
+}
+updateClock();setInterval(updateClock,10000);
 
-    <div class="app-grid">
-      <button class="app" onclick="openWhatsApp()">
-        <div class="app-icon" style="background:#25d366">◉</div><span>WhatsApp</span>
-      </button>
-      <button class="app" onclick="toast('Instagram — belum dibuka')">
-        <div class="app-icon" style="background:linear-gradient(35deg,#f8b24c,#ed4b78,#9655c7)">◎</div><span>Instagram</span>
-      </button>
-      <button class="app" onclick="toast('kamera belum tersedia')">
-        <div class="app-icon" style="background:#e6e6e6">📷</div><span>Kamera</span>
-      </button>
-      <button class="app" onclick="toast('galeri belum tersedia')">
-        <div class="app-icon" style="background:#fff">🌸</div><span>Foto</span>
-      </button>
-      <button class="app" onclick="toast('musik belum tersedia')">
-        <div class="app-icon" style="background:#ed617a">♫</div><span>Musik</span>
-      </button>
-      <button class="app" onclick="toast('catatan belum tersedia')">
-        <div class="app-icon" style="background:#ffe58c">▤</div><span>Catatan</span>
-      </button>
-      <button class="app" onclick="toast('telepon belum tersedia')">
-        <div class="app-icon" style="background:#45c96b">☎</div><span>Telepon</span>
-      </button>
-      <button class="app" onclick="toast('pengaturan belum tersedia')">
-        <div class="app-icon" style="background:#ddd">⚙</div><span>Pengaturan</span>
-      </button>
-    </div>
+/* LOCK SCREEN: swipe DOWN or tap notification */
+let startY=0,startX=0;
+const lock=$('lock');
+lock.addEventListener('pointerdown',e=>{
+ startY=e.clientY;startX=e.clientX;
+});
+lock.addEventListener('pointerup',e=>{
+ const dy=e.clientY-startY;
+ const dx=Math.abs(e.clientX-startX);
+ if(dy>35 && dy>dx) openPass();
+});
+lock.addEventListener('click',e=>{
+ if(e.target.closest('#notification'))openPass();
+});
+$('notification').addEventListener('keydown',e=>{
+ if(e.key==='Enter'||e.key===' '){e.preventDefault();openPass();}
+});
+function openPass(){
+ passcode='';
+ updateDots();
+ $('passError').textContent='';
+ showScreen('pass');
+}
+$('flashBtn').addEventListener('click',e=>{e.stopPropagation();});
+$('cameraBtn').addEventListener('click',e=>{e.stopPropagation();openPass();});
 
-    <div class="dock">
-      <button class="app" onclick="toast('telepon belum tersedia')"><div class="app-icon" style="background:#45c96b">☎</div></button>
-      <button class="app" onclick="openWhatsApp()"><div class="app-icon" style="background:#25d366">◉</div></button>
-      <button class="app" onclick="toast('browser belum tersedia')"><div class="app-icon" style="background:#e9f4ff">🌐</div></button>
-      <button class="app" onclick="toast('musik belum tersedia')"><div class="app-icon" style="background:#ed617a">♫</div></button>
-    </div>
-  </section>
+/* PASSCODE */
+let passcode='';
+function updateDots(){
+ document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('filled',i<passcode.length));
+}
+function addDigit(n){
+ if(passcode.length>=4)return;
+ passcode+=n;updateDots();
+ if(passcode.length===4){
+  if(passcode==='1234'){
+   setTimeout(()=>showScreen('home'),180);
+  }else{
+   $('passError').textContent='Kode sandi salah, coba lagi.';
+   setTimeout(()=>{passcode='';updateDots();$('passError').textContent='';},700);
+  }
+ }
+}
+document.querySelectorAll('[data-num]').forEach(b=>b.addEventListener('click',()=>addDigit(b.dataset.num)));
+$('deleteKey').addEventListener('click',()=>{passcode=passcode.slice(0,-1);updateDots();});
+$('cancelPass').addEventListener('click',()=>showScreen('lock'));
 
-  <!-- WHATSAPP CHAT LIST -->
-  <section id="whatsapp">
-    <div class="wa-header">
-      <div class="wa-heading">WhatsApp</div>
-      <div class="wa-search">⌕ &nbsp; cari</div>
-      <div class="wa-tabs">
-        <button class="wa-tab active">semua</button>
-        <button class="wa-tab">belum dibaca</button>
-        <button class="wa-tab">favorit</button>
-      </div>
-    </div>
-    <div class="chat-list">
-      <button class="chat-item" onclick="openRoom('adiba')">
-        <div class="avatar" style="background:#c98c86">A</div>
-        <div class="chat-info">
-          <div class="chat-topline"><span class="chat-name">Adiba</span><span class="chat-time">09.38</span></div>
-          <div class="chat-preview">HALIMAH ANJIR LO DI MANA???</div>
-        </div>
-        <span class="unread">2</span>
-      </button>
+/* HOME APP BUTTONS */
+document.querySelectorAll('[data-app="wa"]').forEach(b=>b.addEventListener('click',()=>showScreen('wa')));
+$('waBack').addEventListener('click',()=>showScreen('home'));
+document.querySelectorAll('[data-app]:not([data-app="wa"])').forEach(b=>{
+ b.addEventListener('click',()=>toastMessage('aplikasi ini belum dibuka di cerita'));
+});
 
-      <button class="chat-item" onclick="openRoom('rafka')">
-        <div class="avatar" style="background:#667b91">R</div>
-        <div class="chat-info">
-          <div class="chat-topline"><span class="chat-name">Rafka</span><span class="chat-time">08.56</span></div>
-          <div class="chat-preview">jangan telat lagi besok.</div>
-        </div>
-      </button>
-
-      <button class="chat-item" onclick="openRoom('group')">
-        <div class="avatar" style="background:#9d91b6">✿</div>
-        <div class="chat-info">
-          <div class="chat-topline"><span class="chat-name">cewek-cewek kelas 8</span><span class="chat-time">08.12</span></div>
-          <div class="chat-preview">Naya: WOI ADA YANG TAU GAK</div>
-        </div>
-        <span class="unread">5</span>
-      </button>
-
-      <button class="chat-item" onclick="openRoom('rafka')">
-        <div class="avatar" style="background:#c0a1b6">N</div>
-        <div class="chat-info">
-          <div class="chat-topline"><span class="chat-name">Naya</span><span class="chat-time">kemarin</span></div>
-          <div class="chat-preview">besok cerita yaaa</div>
-        </div>
-      </button>
-    </div>
-  </section>
-
-  <!-- CHAT ROOM -->
-  <section id="room">
-    <header class="room-header">
-      <button class="back" onclick="backToList()">‹</button>
-      <div class="room-avatar" id="roomAvatar" style="background:#c98c86">A</div>
-      <div class="room-person">
-        <div class="room-name" id="roomName">Adiba</div>
-        <div class="room-status" id="roomStatus">online</div>
-      </div>
-      <button class="room-menu" onclick="toast('info kontak')">⋮</button>
-    </header>
-
-    <div class="messages" id="messages">
-      <div class="day-label">HARI INI</div>
-    </div>
-
-    <div class="choice-area" id="choiceArea">
-      <div class="choice-label">pilih tindakan lo</div>
-      <div class="choices" id="choices"></div>
-    </div>
-
-    <div class="keyboard-wrap" id="keyboardWrap">
-      <div class="keyboard-hint">pencet tombol keyboard untuk mulai mengetik otomatis</div>
-      <div class="keyboard">
-        <div class="keyrow">
-          <button class="key" onclick="startTyping()">Q</button><button class="key" onclick="startTyping()">W</button><button class="key" onclick="startTyping()">E</button><button class="key" onclick="startTyping()">R</button><button class="key" onclick="startTyping()">T</button><button class="key" onclick="startTyping()">Y</button><button class="key" onclick="startTyping()">U</button><button class="key" onclick="startTyping()">I</button><button class="key" onclick="startTyping()">O</button><button class="key" onclick="startTyping()">P</button>
-        </div>
-        <div class="keyrow">
-          <button class="key" onclick="startTyping()">A</button><button class="key" onclick="startTyping()">S</button><button class="key" onclick="startTyping()">D</button><button class="key" onclick="startTyping()">F</button><button class="key" onclick="startTyping()">G</button><button class="key" onclick="startTyping()">H</button><button class="key" onclick="startTyping()">J</button><button class="key" onclick="startTyping()">K</button><button class="key" onclick="startTyping()">L</button>
-        </div>
-        <div class="keyrow">
-          <button class="key special" onclick="startTyping()">⇧</button><button class="key" onclick="startTyping()">Z</button><button class="key" onclick="startTyping()">X</button><button class="key" onclick="startTyping()">C</button><button class="key" onclick="startTyping()">V</button><button class="key" onclick="startTyping()">B</button><button class="key" onclick="startTyping()">N</button><button class="key" onclick="startTyping()">M</button><button class="key special" onclick="st
+/* CHAT DATA */
+const chatData={
+ adiba:{
+  name:'Adiba',avatar:'A',sub:'online',
+  start:[
+   {from:'them',text:'halimah, kamu dimana??',time:'09.38'},
+   {from:'them',text:'gue dari tadi nyariin lo',time:'09.38'},
+   {from:'them',text:'jangan bilang lo belum berangkat',time:'09.39'}
+  ],
+  replies:[
+   {me:'bentar lagi nyampe. kenapa emang?',them:'bentar lagi tuh dari tadi lo bilang gitu'},
+   {me:'gue ada urusan dikit tadi',them:'urusan apa? kok chat gue ga dibales'},
+   {me:'nanti gue ceritain pas ketemu',them:'yaudah. cepet ke kelas, ada yang nyariin lo'}
+  ]
+ },
+ rafka:{
+  name:'Rafka',avatar:'R',sub:'terakhir dilihat hari ini pukul 09.32',
+  start:[
+   {from:'them',text:'lo udah sampe sekolah?',time:'09.30'},
+   {from:'them',text:'halimah?',time:'09.32'}
+  ],
+  replies:[
+   {me:'belum. kenapa?',them:'gapapa, cuma nanya aja'},
+   {me:'tumben banget nanyain gue',them:'emang gaboleh?'},
+   {me:'boleh sih wkwk',them:'yaudah cepet dateng. gue tunggu'}
+  ]
+ },
+ kelas:{
+  name:'kelas 8B',avatar:'8B',sub:'3 anggota online',
+  start:[
+   {from:'them',sender:'Alya',text:'jangan lupa tugasnya dikumpulin hari ini',time:'08.56'},
+   {from:'them',sender:'Adiba',text:'halimah mana dah?',time:'09.01'}
+  ],
+  replies:[
+   {me:'gue otw',them:'Alya: akhirnya muncul juga lo'},
+   {me:'ada apa emangnya?',them:'Adiba: nanti aja cerita pas lo nyampe'}
+  ]
+ }
+};
+let currentChat='adiba';
+let replyIndex={adiba:0,rafka:0,kelas:0};
+let loaded={};
+function openChat(id){
+ currentChat=id;
+ const d=chatData[id];
+ $('roomName').textContent=d.name;
+ $('roomAvatar').textContent=d.avatar;
+ $('roomSub').text
