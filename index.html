@@ -358,7 +358,7 @@ lock.addEventListener('pointerdown',e=>{
 lock.addEventListener('pointerup',e=>{
  const dy=e.clientY-startY;
  const dx=Math.abs(e.clientX-startX);
- if(dy>35 && dy>dx) openPass();
+ openPass();
 });
 lock.addEventListener('click',e=>{
  if(e.target.closest('#notification'))openPass();
