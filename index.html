@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>morning or night?</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#171720;font-family:Arial,sans-serif;color:white}
+.home{max-width:390px;min-height:100vh;margin:auto;padding:25px 20px;background:linear-gradient(150deg,#191927,#51415e)}
+.status{display:flex;justify-content:space-between;font-size:13px}
+h1{font-size:38px;margin-top:65px}
+.sub{color:#bcb9ca;font-size:13px}
+.widget{background:#ffffff15;padding:20px;border-radius:20px;margin:25px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px 10px}
+.app{border:0;background:none;color:white;font-size:12px;cursor:pointer}
+.icon{display:grid;place-items:center;margin:0 auto 9px;width:62px;height:62px;border-radius:17px;background:#f4f0ff;color:#39334f;font-size:26px}
+.green{background:#55d66b;color:white}
+.pink{background:#f36c9b;color:white}
+.yellow{background:#ffeaa0}
+.page{display:none;position:fixed;inset:0;background:#f7f7fa;color:#222;max-width:390px;margin:auto;overflow:auto}
+header{padding:20px;background:white;border-bottom:1px solid #ddd;display:flex;gap:15px;align-items:center}
+header button{border:0;background:none;font-size:26px;color:#2684ff}
+.chat{padding:18px;min-height:70vh}
+.date{text-align:center;color:#888;font-size:12px;margin:15px}
+.bubble{padding:12px 14px;border-radius:18px;margin:12px 0;max-width:85%;font-size:15px;overflow-wrap:anywhere}
+.in{background:#e5e5eb;border-bottom-left-radius:5px}
+.out{background:#1685ff;color:white;margin-left:auto;border-bottom-right-radius:5px}
+form{position:sticky;bottom:0;background:white;padding:12px;display:flex;gap:8px}
+input{min-width:0;flex:1;border:1px solid #ddd;border-radius:22px;padding:12px}
+form button{border:0;border-radius:50%;background:#1685ff;color:white;width:42px}
+.note{margin:20px;background:#fff3ad;color:#333;padding:20px;line-height:1.8;min-height:220px}
+.post{margin:20px;padding:20px;background:linear-gradient(140deg,#252039,#aa819e);height:300px;display:grid;place-items:center;text-align:center;font-size:25px}
+</style>
+</head>
+<body>
+<div class="home" id="home">
+<div class="status"><span>02:17</span><span>●●● ▰</span></div>
+<h1>morning<br>or night?</h1>
+<div class="sub">Sunday · 02:17 AM</div>
+<div class="widget">Good night, Ye-on.<br><br><span class="sub">you have 1 unread message.</span></div>
+<div class="grid">
+<button class="app" onclick="openPage('messages')"><span class="icon green">●</span>Messages</button>
+<button class="app" onclick="openPage('instagram')"><span class="icon pink">◎</span>Instagram</button>
+<button class="app" onclick="openPage('notes')"><span class="icon yellow">▤</span>Notes</button>
+<button class="app" onclick="openPage('phone')"><span class="icon green">☎</span>Phone</button>
+<button class="app" onclick="openPage('photos')"><span class="icon">✿</span>Photos</button>
+<button class="app" onclick="openPage('clock')"><span class="icon">◷</span>Clock</button>
+</div>
+</div>
+
+<section class="page" id="messages">
+<header><button onclick="goHome()">‹</button><strong>Carmen unnie..</strong></header>
+<div class="chat" id="chat">
+<div class="date">Today 02:17</div>
+<div class="bubble in">Y39n kamudb dimany???737 :++++</div>
+<div class="bubble out">??</div>
+</div>
+<form onsubmit="sendMsg(event)">
+<input id="msg" placeholder="iMessage..." autocomplete="off">
+<button>↑</button>
+</form>
+</section>
+
+<section class="page" id="instagram">
+<header><button onclick="goHome()">‹</button><strong>Instagram</strong></header>
+<div style="padding:20px"><b>carmen_h2h</b><div class="sub">2 hours ago</div></div>
+<div class="post">MORNING<br>OR<br>NIGHT?</div>
+<div style="padding:20px"><b>carmen_h2h</b><br>jangan sampai pagi.</div>
+</section>
+
+<section class="page" id="notes">
+<header><button onclick="goHome()">‹</button><strong>Notes</strong></header>
+<div class="note">untitled<br><br>kalau ada yang chat kamu jam 02:17,<br>jangan tanya dia ada di mana.<br><br>jangan jawab panggilannya.<br><br>[teks dihapus]</div>
+</section>
+
+<section class="page" id="phone">
+<header><button onclick="goHome()">‹</button><strong>Phone</strong></header>
+<div style="text-align:center;padding:100px 20px">
+<div style="font-size:60px">C</div><h2>Carmen unnie..</h2>
+<p>Incoming call...</p>
+<button onclick="alert('Missed call: Carmen unnie..')" style="background:#ff453a;color:white;border:0;border-radius:50%;padding:20px">✕</button>
+<button onclick="alert('...tidak ada suara...')" style="background:#32c759;color:white;border:0;border-radius:50%;padding:20px">☎</button>
+</div>
+</section>
+
+<section class="page" id="photos">
+<header><button onclick="goHome()">‹</button><strong>Photos</strong></header>
+<div class="post">02:17 AM<br><br>the hallway is empty.</div>
+</section>
+
+<section class="page" id="clock">
+<header><button onclick="goHome()">‹</button><strong>Clock</strong></header>
+<div style="text-align:center;padding:80px 10px;font-size:45px">02:17<br><span style="font-size:14px">Alarm · 02:17 AM</span></div>
+</section>
+
+<script>
+function openPage(id){
+document.getElementById('home').style.display='none';
+document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+document.getElementById(id).style.display='block';
+}
+function goHome(){
+document.getElementById('home').style.display='block';
+document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+}
+function sendMsg(e){
+e.preventDefault();
+let input=document.getElementById('msg');
+let value=input.value.trim();
+if(!value)return;
+let b=document.createElement('div');
+b.className='bubble out';
+b.textContent=value;
+document.getElementById('chat').appendChild(b);
+input.value='';
+}
+</script>
+</body>
+  </html>
